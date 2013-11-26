@@ -24,4 +24,8 @@ class phpfpm::base {
 			fail("No support for your OS (${::operatingsystem}) in phpfpm::base.  Patches appreciated.")
 		}
 	}
+	
+	package { $pkg:
+		ensure => present
+	}
 }
