@@ -132,6 +132,6 @@ define phpfpm::pool(
 		mode    => 0444,
 		owner   => "root",
 		group   => "root",
-		notify  => Phpfpm::Master[$master]
+		notify  => Exec["phpfpm/master/${master}:reload"]
 	}
 }
