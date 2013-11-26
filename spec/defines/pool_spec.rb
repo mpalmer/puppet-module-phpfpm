@@ -17,7 +17,7 @@ describe "phpfpm::pool" do
 		
 		it "creates a config file" do
 			expect(subject).to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
-			      with_notify("Phpfpm::Master[rsmaster]")
+			      with_notify("Exec[phpfpm/master/rsmaster:reload]")
 		end
 		
 		it "sets the pool name" do
