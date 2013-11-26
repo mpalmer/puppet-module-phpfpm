@@ -12,4 +12,16 @@ class phpfpm::base {
 			owner  => "root",
 			group  => "root";
 	}
+	
+	case $::operatingsystem {
+		"Debian": {
+			$pkg = "php5-fpm"
+		}
+		"RedHat","CentOS": {
+			$pkg = "php-fpm"
+		}
+		default: {
+			fail("No support for your OS (${::operatingsystem}) in phpfpm::base.  Patches appreciated.")
+		}
+	}
 }
