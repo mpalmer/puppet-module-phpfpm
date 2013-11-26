@@ -135,4 +135,3 @@ define phpfpm::pool(
 		notify  => Phpfpm::Master[$master]
 	}
 }
-		

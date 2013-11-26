@@ -78,7 +78,7 @@ define phpfpm::master(
 			require => Daemontools::Service["phpfpm-${name}"];
 	}
 
-	exec { "phpfpm/master/rspec:reload":
+	exec { "phpfpm/master/${name}:reload":
 		command     => "/usr/bin/svc -2 /etc/service/phpfpm-${name}",
 		refreshonly => true;
 	}
