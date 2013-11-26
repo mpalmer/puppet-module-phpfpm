@@ -1,0 +1,4 @@
+This directory and its contents were created by the "phpfpm" puppet module. 
+In general, it'd be a good idea if you didn't fiddle with anything in here. 
+There's a pretty good chance that your changes, including new files, may
+well be reverted the next time Puppet runs.
