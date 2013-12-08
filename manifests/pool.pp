@@ -87,7 +87,36 @@
 #     In this case, you'll save some CPU by not having to spawn new workers
 #     for every little peak.  On the other hand, you'll be burning memory by
 #     having them sitting around not doing anything.  Your choice.
-#    
+#
+#  * `accesslog` (string; optional; default `undef`)
+#
+#     Set this to the name of a file to which you wish to log all requests
+#     to the pool.  If left as the default, no access logging will take place.
+#
+#  * `accesslog_format` (string; optional; default `"%R - %u %t \"%m %r\" %s"`)
+#
+#     The format of entries written to the accesslog.  See the default pool
+#     config file on your system for full details of the formatting tags
+#     available (of *course* it isn't documented in the manual...).  If
+#     `accesslog` isn't set, this setting has no useful effect.
+#
+#  * `slowlog` (string; optional; default `undef`)
+#
+#     Set this to the name of a file to which slow requests should be logged.
+#     If left as default, no logging will take place.
+#
+#  * `slowlog_timeout` (string; optional; default `"2s"`
+#
+#     How long a request has to run for before it'll get recorded in the
+#     slowlog.  The suffix can be one of `s` (seconds), `m` (minutes), `h`
+#     (hours), or `d` (days -- exactly how fucking bad *is* your PHP code?)
+#
+#  * `errorlog` (string; optional; default `undef`)
+#
+#     Where to log errors to.  If not set, then errors are probably going to
+#     be displayed on screen.  Note that this config is set via PHP config,
+#     so it might be overridden by something else.
+#
 define phpfpm::pool(
 	$master,
 	$user,
@@ -97,10 +126,20 @@ define phpfpm::pool(
 	$min_spare_workers = undef,
 	$max_spare_workers = undef,
 	$idle_timeout      = "30s",
+	$accesslog         = undef,
+	$accesslog_format  = "%R - %u %t \"%m %r\" %s",
+	$slowlog           = undef,
+	$slowlog_timeout   = "2s",
+	$errorlog          = undef
 ) {
-	$phpfpm_pool_name                 = $name
-	$phpfpm_pool_user                 = $user
-	$phpfpm_pool_listen               = $listen
+	$phpfpm_pool_name             = $name
+	$phpfpm_pool_user             = $user
+	$phpfpm_pool_listen           = $listen
+	$phpfpm_pool_accesslog        = $accesslog
+	$phpfpm_pool_accesslog_format = $accesslog_format
+	$phpfpm_pool_slowlog          = $slowlog
+	$phpfpm_pool_slowlog_timeout  = $slowlog_timeout
+	$phpfpm_pool_errorlog         = $errorlog
 
 	case $strategy {
 		"static","dynamic","ondemand": {
