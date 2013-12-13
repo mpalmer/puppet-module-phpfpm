@@ -21,6 +21,16 @@
 #     specify a master which doesn't exist, you'll get a Puppet compile
 #     error.
 #
+#  * `user` (string; required)
+#
+#     The user to run the pool as.  This should, in general, be the user who
+#     owns the files that will be run, or a user who has appropriate
+#     permissions to read and write the files that it needs to.  In general,
+#     specifying any of `root`, `www-data`, `httpd`, `apache`, or any other
+#     system-level user is a mistake.  In certain very limited circumstances
+#     `nobody` may be appropriate, but be sure not to grant any specific
+#     permission bits to that user.
+#
 #  * `listen` (string; optional; default `/etc/service/phpfpm-${master}/tmp/${name}.sock`)
 #
 #     Where to listen for requests to this pool.  If the value of this
