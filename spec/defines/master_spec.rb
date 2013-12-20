@@ -97,4 +97,14 @@ describe "phpfpm::master" do
 			      with_content(/^process\.max = 42$/)
 		end
 	end
+
+	context "with php_ini set" do
+		let(:params) { { :php_ini => "/foo/bar/baz/php.ini" } }
+
+		it "specifies php.ini in the command" do
+			expect(subject).
+			  to contain_daemontools__service("phpfpm-rspec").
+			  with_command(%r{--php-ini /foo/bar/baz/php.ini})
+		end
+	end
 end

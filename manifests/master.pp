@@ -38,9 +38,18 @@
 #     won't interfere with normal operation, but which won't allow your
 #     machine to be ground into dust by an influx of traffic.
 #
+#  * `php_ini` (string; optional; default `undef`)
+#
+#     If set to a non-`undef` value, this attribute is taken as the
+#     fully-qualified path to a `php.ini` file to use as the default
+#     configuration for all pools defined by this master.  Left as the
+#     default, the pool will use the PHP build's own `php.ini`
+#     configuration.
+#
 define phpfpm::master(
 	$log_level   = "notice",
-	$max_workers = 10
+	$max_workers = 10,
+	$php_ini     = undef
 ) {
 	include phpfpm::base
 	
@@ -95,10 +104,16 @@ define phpfpm::master(
 		}
 	}
 	
+	if $php_ini {
+		$php_ini_opt = " --php-ini ${php_ini}"
+	} else {
+		$php_ini_opt = ""
+	}
+	
 	# The master daemon itself needs to run as root, so it can drop privs to
 	# individual users as required for each pool
 	daemontools::service { "phpfpm-${name}":
-		command => "${phpfpm_master_command} -y /etc/phpfpm/${name}/master.conf",
+		command => "${phpfpm_master_command}${php_ini_opt} -y /etc/phpfpm/${name}/master.conf",
 		user    => "root",
 		setuid  => false
 	}
