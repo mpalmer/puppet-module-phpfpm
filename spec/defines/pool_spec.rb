@@ -210,4 +210,109 @@ describe "phpfpm::pool" do
 			      with_content(/^pm\.process_idle_timeout\s*=$/)
 		end
 	end
+	
+	context "with environment set" do
+		let(:params) { { :master      => "rsmaster",
+		                 :user        => "fred",
+		                 :environment => { 'FOO' => "bar",
+		                                   'BAZ' => "wombat"
+		                                 }
+		             } }
+		
+		it "sets the FOO env var" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^env\[FOO\] = bar$/)
+		end
+
+		it "sets the BAR env var" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^env\[BAZ\] = wombat$/)
+		end
+	end
+
+	context "with php_admin_values set" do
+		let(:params) { { :master           => "rsmaster",
+		                 :user             => "fred",
+		                 :php_admin_values => { 'FOO' => "bar",
+		                                        'BAZ' => "wombat"
+		                                      }
+		             } }
+		
+		it "sets the FOO admin_value" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_admin_value\[FOO\] = bar$/)
+		end
+
+		it "sets the BAR admin_value" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_admin_value\[BAZ\] = wombat$/)
+		end
+	end
+
+	context "with php_values set" do
+		let(:params) { { :master     => "rsmaster",
+		                 :user       => "fred",
+		                 :php_values => { 'FOO' => "bar",
+		                                  'BAZ' => "wombat"
+		                                }
+		             } }
+		
+		it "sets the FOO value" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_value\[FOO\] = bar$/)
+		end
+
+		it "sets the BAR value" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_value\[BAZ\] = wombat$/)
+		end
+	end
+
+	context "with php_admin_flags set" do
+		let(:params) { { :master          => "rsmaster",
+		                 :user            => "fred",
+		                 :php_admin_flags => { 'FOO' => true,
+		                                       'BAZ' => false
+		                                     }
+		             } }
+		
+		it "sets the FOO admin_flag" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_admin_flag\[FOO\] = on$/)
+		end
+
+		it "sets the BAR admin_flag" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_admin_flag\[BAZ\] = off$/)
+		end
+	end
+
+	context "with php_flags set" do
+		let(:params) { { :master    => "rsmaster",
+		                 :user      => "fred",
+		                 :php_flags => { 'FOO' => true,
+		                                 'BAZ' => false
+		                               }
+		             } }
+		
+		it "sets the FOO flag" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_flag\[FOO\] = on$/)
+		end
+
+		it "sets the BAR flag" do
+			expect(subject).
+			  to contain_file("/etc/phpfpm/rsmaster/pool.d/rspec.conf").
+			  with_content(/^php_flag\[BAZ\] = off$/)
+		end
+	end
 end

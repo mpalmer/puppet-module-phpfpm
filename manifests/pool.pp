@@ -127,6 +127,32 @@
 #     be displayed on screen.  Note that this config is set via PHP config,
 #     so it might be overridden by something else.
 #
+#  * `environment` (hash; optional; default `{}`)
+#
+#     If your application needs certain environment variables set in order
+#     to correctly operate, you can specify them here.  The hash should
+#     contain a set of "ENV_VAR" => "value" pairs.  Note that the FPM
+#     configuration file doesn't really specify how to escape esoteric
+#     characters in values (like newlines), so you may have to keep it
+#     simple.
+#
+#  * `php_admin_values` (hash; optional; default `{}`)
+#  * `php_admin_flags` (hash; optional; default `{}`)
+#  * `php_values` (hash; optional; default `{}`)
+#  * `php_flags` (hash; optional; default `{}`)
+#
+#     Each of these four attributes sets PHP configuration parameters in the
+#     pool.  The difference between the `admin` and non-`admin` attributes
+#     is that parameters set via the `admin` attributes cannot be overridden
+#     by the application calling `ini_set`().
+#
+#     For each attribute, the keys in the hash must be the names of PHP
+#     settings.  What constitutes a flag vs a value is determined by PHP,
+#     and we don't attempt to sanity check what you pass in.  The values to
+#     the `flags` attributes must be booleans (ie `true` or `false`), while
+#     the `values` attributes take strings (or things which can be turned
+#     into strings).
+#    
 define phpfpm::pool(
 	$master,
 	$user,
@@ -140,7 +166,12 @@ define phpfpm::pool(
 	$accesslog_format  = "%R - %u %t \"%m %r\" %s",
 	$slowlog           = undef,
 	$slowlog_timeout   = "2s",
-	$errorlog          = undef
+	$errorlog          = undef,
+	$environment       = {},
+	$php_admin_values  = {},
+	$php_admin_flags   = {},
+	$php_values        = {},
+	$php_flags         = {}
 ) {
 	$phpfpm_pool_name             = $name
 	$phpfpm_pool_user             = $user
@@ -150,6 +181,11 @@ define phpfpm::pool(
 	$phpfpm_pool_slowlog          = $slowlog
 	$phpfpm_pool_slowlog_timeout  = $slowlog_timeout
 	$phpfpm_pool_errorlog         = $errorlog
+	$phpfpm_pool_environment      = $environment
+	$phpfpm_pool_admin_values     = $php_admin_values
+	$phpfpm_pool_admin_flags      = $php_admin_flags
+	$phpfpm_pool_values           = $php_values
+	$phpfpm_pool_flags            = $php_flags
 
 	case $strategy {
 		"static","dynamic","ondemand": {
