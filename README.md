@@ -14,3 +14,10 @@ how to control the spawning of workers, and so on.
 
 See the documentation for each type for all the gory details on what each
 type can do, and how to make it do it.
+
+
+# Licence
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 3, as published by
+the Free Software Foundation.
