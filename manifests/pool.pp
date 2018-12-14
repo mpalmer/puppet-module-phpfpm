@@ -214,7 +214,7 @@ define phpfpm::pool(
 	file { "/etc/phpfpm/${master}/pool.d/${name}.conf":
 		ensure  => file,
 		content => template("phpfpm/etc/phpfpm/pool.conf"),
-		mode    => 0444,
+		mode    => "0444",
 		owner   => "root",
 		group   => "root",
 		notify  => Exec["phpfpm/master/${master}:reload"]

@@ -61,12 +61,12 @@ define phpfpm::master(
 	file {
 		"/etc/phpfpm/${name}":
 			ensure  => directory,
-			mode    => 0755,
+			mode    => "0755",
 			owner   => "root",
 			group   => "root";
 		"/etc/phpfpm/${name}/pool.d":
 			ensure  => directory,
-			mode    => 0755,
+			mode    => "0755",
 			owner   => "root",
 			group   => "root",
 			purge   => true,
@@ -75,13 +75,13 @@ define phpfpm::master(
 		"/etc/phpfpm/${name}/master.conf":
 			ensure  => file,
 			content => template("phpfpm/etc/phpfpm/master.conf"),
-			mode    => 0444,
+			mode    => "0444",
 			owner   => "root",
 			group   => "root",
 			notify  => Exec["phpfpm/master/${name}:reload"];
 		"/etc/service/phpfpm-${name}/tmp":
 			ensure  => directory,
-			mode    => 0710,
+			mode    => "0710",
 			owner   => "root",
 			group   => "www-data",
 			require => Daemontools::Service["phpfpm-${name}"];
