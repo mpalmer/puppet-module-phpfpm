@@ -12,10 +12,20 @@ class phpfpm::base {
 			owner  => "root",
 			group  => "root";
 	}
-	
+
 	case $::operatingsystem {
 		"Debian": {
-			$pkg = "php5-fpm"
+			case $::lsbdistcodename {
+				"jessie": {
+					$pkg = "php5-fpm"
+				}
+				"buster": {
+					$pkg = "php7.3-fpm"
+				}
+				default: {
+					fail("No support for Debian ${::lsbdistcodename} in phpfpm::base.  Patches appreciated.")
+				}
+			}
 		}
 		"RedHat","CentOS": {
 			$pkg = "php-fpm"
@@ -24,7 +34,7 @@ class phpfpm::base {
 			fail("No support for your OS (${::operatingsystem}) in phpfpm::base.  Patches appreciated.")
 		}
 	}
-	
+
 	package { $pkg:
 		ensure => present
 	}

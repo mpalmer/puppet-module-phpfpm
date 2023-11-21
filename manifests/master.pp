@@ -52,12 +52,12 @@ define phpfpm::master(
 	$php_ini     = undef
 ) {
 	include phpfpm::base
-	
+
 	# Template variables
 	$phpfpm_master_name        = $name
 	$phpfpm_master_log_level   = $log_level
 	$phpfpm_master_max_workers = $max_workers
-	
+
 	file {
 		"/etc/phpfpm/${name}":
 			ensure  => directory,
@@ -91,10 +91,20 @@ define phpfpm::master(
 		command     => "/usr/bin/svc -2 /etc/service/phpfpm-${name}",
 		refreshonly => true;
 	}
-	
+
 	case $::operatingsystem {
 		"Debian": {
-			$phpfpm_master_command = "/usr/sbin/php5-fpm"
+			case $::lsbdistcodename {
+				"jessie": {
+					$phpfpm_master_command = "/usr/sbin/php5-fpm"
+				}
+				"buster": {
+					$phpfpm_master_command = "/usr/sbin/php7.3-fpm"
+				}
+				default: {
+					fail("phpfpm::master does not know about Debian ${::lsbdistcodename}.  Patches appreciated.")
+				}
+			}
 		}
 		"RedHat","CentOS": {
 			$phpfpm_master_command = "/usr/sbin/php-fpm"
@@ -103,13 +113,13 @@ define phpfpm::master(
 			fail("phpfpm::master does not know about your operatingsystem (${::operatingsystem}).  Please submit a patch.")
 		}
 	}
-	
+
 	if $php_ini {
 		$php_ini_opt = " --php-ini ${php_ini}"
 	} else {
 		$php_ini_opt = ""
 	}
-	
+
 	# The master daemon itself needs to run as root, so it can drop privs to
 	# individual users as required for each pool
 	daemontools::service { "phpfpm-${name}":
