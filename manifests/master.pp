@@ -99,7 +99,7 @@ define phpfpm::master(
 					$phpfpm_master_command = "/usr/sbin/php5-fpm"
 				}
 				"buster": {
-					$phpfpm_master_command = "/usr/sbin/php7.3-fpm"
+					$phpfpm_master_command = "/usr/sbin/php-fpm7.3"
 				}
 				default: {
 					fail("phpfpm::master does not know about Debian ${::lsbdistcodename}.  Patches appreciated.")
